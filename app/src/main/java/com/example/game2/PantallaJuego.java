@@ -55,6 +55,7 @@ public class PantallaJuego extends AppCompatActivity {
                         //Cada x segundos movemos la moneda 10dp
                         juego.posMonedaY += juego.avanceMonedas;
                         juego.posMonedaFalsaY += juego.avanceMonedas;
+
                         //refresca la pantalla y llama al draw
                         juego.invalidate();
                         if (juego.puntuacion < 0 || juego.contadorMonedasMalasCogidas == 3 || juego.contadorMonedasBuenasEscapadas == 4){

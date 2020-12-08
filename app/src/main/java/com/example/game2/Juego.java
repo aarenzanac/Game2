@@ -23,6 +23,8 @@ public class Juego extends View {
         private RectF rectCesta;
         private RectF rectMoneda;
         private RectF rectMonedaFalsa;
+        public RectF rectVidaMonedaBuena1, rectVidaMonedaBuena2, rectVidaMonedaBuena3;
+        public RectF rectVidaMonedaMala1, rectVidaMonedaMala2, rectVidaMonedaMala3;
         public Integer puntuacion = 0;
         private Random random = new Random();
         private MediaPlayer gameloop = new MediaPlayer();
@@ -32,6 +34,26 @@ public class Juego extends View {
         private PantallaJuego pantallaJuego = new PantallaJuego();
         boolean valorMusica;
         boolean valorSonidos;
+        Paint fondo = new Paint();
+        Paint cesta = new Paint();
+        Paint moneda = new Paint();
+        Paint puntos = new Paint();
+        Paint tituloPuntos = new Paint();
+        Paint tituloMonedasBuenas = new Paint();
+        Paint tituloMonedasMalas = new Paint();
+        Paint vidaMonedaBuena1 = new Paint();
+        Paint vidaMonedaMala1 = new Paint();
+        Paint vidaMonedaBuena2 = new Paint();
+        Paint vidaMonedaMala2 = new Paint();
+        Paint vidaMonedaBuena3 = new Paint();
+        Paint vidaMonedaMala3 = new Paint();
+        int colorMonedaBuena1 = Color.GREEN;
+        int colorMonedaBuena2 = Color.GREEN;
+        int colorMonedaBuena3 = Color.GREEN;
+        int colorMonedaMala1 = Color.RED;
+        int colorMonedaMala2 = Color.RED;
+        int colorMonedaMala3 = Color.RED;
+
 
 
 
@@ -89,11 +111,6 @@ public class Juego extends View {
 
             }
 
-            //Definimos los objetos a pintar
-            Paint fondo = new Paint();
-            Paint cesta = new Paint();
-            Paint moneda = new Paint();
-            Paint puntos = new Paint();
 
             //Definimos los colores de los objetos a pintar
             //Bitmap res = BitmapFactory.decodeResource(getResources(),R.drawable.piranha);
@@ -102,11 +119,26 @@ public class Juego extends View {
             //fondo.setStyle(Paint.Style.FILL_AND_STROKE);
             cesta.setColor(Color.YELLOW);
             cesta.setStyle(Paint.Style.FILL_AND_STROKE);
-            moneda.setColor(Color.RED);
+            moneda.setColor(Color.GREEN);
             moneda.setStyle(Paint.Style.FILL_AND_STROKE);
+            tituloPuntos.setTextSize(45);
+            tituloPuntos.setTextAlign(Paint.Align.RIGHT);
+            tituloPuntos.setColor(Color.WHITE);
+            tituloMonedasBuenas.setTextSize(45);
+            tituloMonedasBuenas.setTextAlign(Paint.Align.RIGHT);
+            tituloMonedasBuenas.setColor(Color.WHITE);
+            tituloMonedasMalas.setTextSize(45);
+            tituloMonedasMalas.setTextAlign(Paint.Align.RIGHT);
+            tituloMonedasMalas.setColor(Color.WHITE);
             puntos.setTextAlign(Paint.Align.RIGHT);
             puntos.setTextSize(100);
             puntos.setColor(Color.WHITE);
+            vidaMonedaBuena1.setColor(colorMonedaBuena1);
+            vidaMonedaMala1.setColor(colorMonedaMala1);
+            vidaMonedaBuena2.setColor(colorMonedaBuena2);
+            vidaMonedaMala2.setColor(colorMonedaMala2);
+            vidaMonedaBuena3.setColor(colorMonedaBuena3);
+            vidaMonedaMala3.setColor(colorMonedaMala3);
             // puntos.setTypeface(typeface);
 
             //Pinto rectángulo con un ancho y alto de 1000 o de menos si la pantalla es menor.
@@ -126,7 +158,7 @@ public class Juego extends View {
 
             //Pintamos monnedaFalsa
             Paint monedaFalsa = new Paint();
-            monedaFalsa.setColor(Color.GREEN);
+            monedaFalsa.setColor(Color.RED);
             monedaFalsa.setStyle(Paint.Style.FILL_AND_STROKE);
             if (posMonedaFalsaY>alto) {
                 posMonedaFalsaY=50;
@@ -146,6 +178,11 @@ public class Juego extends View {
                 posMonedaFalsaX= random.nextInt(ancho);
                 //CONTAMOS LAS MONEDAS MALAS COGIDAS PARA FINALIZAR EL JUEGO AL LLEGAR A 3
                 contadorMonedasMalasCogidas += 1;
+                if(contadorMonedasMalasCogidas == 1){
+                    colorMonedaMala1 = Color.GRAY;
+                }else if(contadorMonedasBuenasEscapadas == 2){
+                    colorMonedaMala2 = Color.GRAY;
+                }
             }
 
             // Calculo intersección
@@ -160,6 +197,11 @@ public class Juego extends View {
                 //CONTAMOS LAS MONEDAS BUENAS ESCAPADAS PARA AL LLEGAR A 3 FINALIZAR EL JUEGO
                 if(posMonedaY - radio == 0){
                     contadorMonedasBuenasEscapadas += 1;
+                    if(contadorMonedasBuenasEscapadas == 2){
+                        colorMonedaBuena1 = Color.GRAY;
+                    }else if(contadorMonedasBuenasEscapadas == 3){
+                        colorMonedaBuena2 = Color.GRAY;
+                    }
                 }
             }
 
@@ -180,5 +222,29 @@ public class Juego extends View {
             }
 
             canvas.drawText(puntuacion.toString(), 150,150,puntos);
+            canvas.drawText("PUNTOS", 200,50,tituloPuntos);
+            canvas.drawText("MONEDAS BUENAS", 680,50,tituloMonedasBuenas);
+            canvas.drawText("MODEDAS MALAS", 1150,50,tituloMonedasMalas);
+
+
+
+            //CONTADOR DE MONEDAS BUENAS ESCAPADAS
+            rectVidaMonedaBuena1= new RectF(350, 150, 300 , 100);
+            rectVidaMonedaBuena2= new RectF(450, 150, 400 , 100);
+            rectVidaMonedaBuena3= new RectF(550, 150, 500 , 100);
+            canvas.drawOval(rectVidaMonedaBuena1, vidaMonedaBuena1);
+            canvas.drawOval(rectVidaMonedaBuena2, vidaMonedaBuena2);
+            canvas.drawOval(rectVidaMonedaBuena3, vidaMonedaBuena3);
+
+            //CONTADOR DE MONEDAS MALAS COGIDAS
+            rectVidaMonedaMala1= new RectF(850, 150, 800 , 100);
+            rectVidaMonedaMala2= new RectF(950, 150, 900 , 100);
+            rectVidaMonedaMala3= new RectF(1050, 150, 1000 , 100);
+            canvas.drawOval(rectVidaMonedaMala1, vidaMonedaMala1);
+            canvas.drawOval(rectVidaMonedaMala2, vidaMonedaMala2);
+            canvas.drawOval(rectVidaMonedaMala3, vidaMonedaMala3);
+
+
+
         }
 }
