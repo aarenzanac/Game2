@@ -30,7 +30,7 @@ public class PantallaOpciones extends AppCompatActivity {
         arrayIntent = new ArrayList<Boolean>();
 
 
-
+        //BOTÓN PARA EMPEZAR LA PARTIDA CON LAS OPCIONES DESEADAS
         botonComenzar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,6 +51,7 @@ public class PantallaOpciones extends AppCompatActivity {
             }
         });
 
+        //BOTON PARA VOLVER AL MENÚ PRINCIPAL
         botonVolver.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

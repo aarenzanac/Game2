@@ -44,7 +44,9 @@ public class MainActivity extends AppCompatActivity {
         botonSalir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+
+                onDestroy();
+                android.os.Process.killProcess(android.os.Process.myPid());
             }
         });
     };

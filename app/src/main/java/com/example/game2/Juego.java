@@ -18,7 +18,7 @@ import java.util.Random;
 public class Juego extends View {
         public int ancho,alto;
         public float escala;
-        public int posX,posY,radio,posMonedaX,posMonedaY, posMonedaFalsaX, posMonedaFalsaY;
+        public int posX,posY,radio,posMonedaX,posMonedaY, posMonedaFalsaX, posMonedaFalsaY, avanceMonedas, contadorMonedasMalasCogidas, contadorMonedasBuenasEscapadas;
         private GestureDetector gestos;
         private RectF rectCesta;
         private RectF rectMoneda;
@@ -30,29 +30,25 @@ public class Juego extends View {
         private MediaPlayer monedaMala = new MediaPlayer();
         private PantallaOpciones pantallaOpciones = new PantallaOpciones();
         private PantallaJuego pantallaJuego = new PantallaJuego();
+        boolean valorMusica;
+        boolean valorSonidos;
 
 
-        boolean valorMusica = true;
 
         //Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/fuente.ttf");
         public Juego(Context context) {
             super(context);
         }
 
-
+        //CONSTRUCTOR DE JUEGO. DEPENDE DE LOS VALORES DE PANTALLA OPICONES, AÑADIMOS MÚSICA Y SONIDO.
         public Juego(Context context, AttributeSet attrs) {
             super(context, attrs);
+
+            gameloop = MediaPlayer.create(context,R.raw.musica);
             monedaBuena = MediaPlayer.create(context,R.raw.coin);
             monedaMala = MediaPlayer.create(context,R.raw.roto);
 
-            if(valorMusica){
-                gameloop = MediaPlayer.create(context,R.raw.musica);
-                gameloop.start();
-            }else{
-                gameloop.stop();
-            }
-
-            //mantiene el loop del soundtrack
+            //EJECUTA LA CANCIÓN EN LOOP SIN FINAL
             gameloop.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
@@ -61,7 +57,7 @@ public class Juego extends View {
             });
         }
 
-        //Sección que capta los eventos del usuario
+        //FUNCIÓN PARA DETECTAR LOS MOVIMIENTOS DEL USUARIO. PULSAR, SOLTAR Y ARRASTRAR.
         @Override
         public boolean onTouchEvent(MotionEvent event) {
         // you may need the x/y location
@@ -83,14 +79,22 @@ public class Juego extends View {
         public Juego(Context context, AttributeSet attrs, int defStyle) {
             super(context, attrs, defStyle);
         }
+
+        //PINTAMOS TODOS LOS ELEMENTOS DEL JUEGO
         @Override
         protected void onDraw(Canvas canvas) {
             super.onDraw(canvas);
+            if(valorMusica){
+                gameloop.start();
+
+            }
+
             //Definimos los objetos a pintar
             Paint fondo = new Paint();
             Paint cesta = new Paint();
             Paint moneda = new Paint();
             Paint puntos = new Paint();
+
             //Definimos los colores de los objetos a pintar
             //Bitmap res = BitmapFactory.decodeResource(getResources(),R.drawable.piranha);
             //canvas.drawBitmap(res, 0, 0, null);
@@ -104,11 +108,14 @@ public class Juego extends View {
             puntos.setTextSize(100);
             puntos.setColor(Color.WHITE);
             // puntos.setTypeface(typeface);
+
             //Pinto rectángulo con un ancho y alto de 1000 o de menos si la pantalla es menor.
-                    canvas.drawRect(new Rect(0,0,(ancho),(alto)),fondo);
+            canvas.drawRect(new Rect(0,0,(ancho),(alto)),fondo);
+
             // Pinto la pelota
             rectCesta= new RectF((posX-radio),(posY-radio),(posX+radio),(posY+radio));
             canvas.drawOval(rectCesta,cesta);
+
             //Pintamos moneda
             if (posMonedaY>alto) {
                 posMonedaY=50;
@@ -128,33 +135,47 @@ public class Juego extends View {
             rectMonedaFalsa = new RectF((posMonedaFalsaX-radio),(posMonedaFalsaY-radio),(posMonedaFalsaX+radio),
                     (posMonedaFalsaY+radio));
             canvas.drawOval(rectMonedaFalsa,monedaFalsa);
+
             // Calculo intersección
             if (RectF.intersects(rectCesta,rectMonedaFalsa)) {
-                monedaMala.start();
+                if(valorSonidos){
+                    monedaMala.start();
+                }
                 puntuacion -= 5;
                 posMonedaFalsaY=50;
                 posMonedaFalsaX= random.nextInt(ancho);
-
+                //CONTAMOS LAS MONEDAS MALAS COGIDAS PARA FINALIZAR EL JUEGO AL LLEGAR A 3
+                contadorMonedasMalasCogidas += 1;
             }
+
             // Calculo intersección
             if (RectF.intersects(rectCesta,rectMoneda)) {
-                monedaBuena.start();
+                if(valorSonidos){
+                    monedaBuena.start();
+                }
                 puntuacion += 2;
-                posMonedaY=50;
+                posMonedaY=60;
                 posMonedaX= random.nextInt(ancho);
-
+            }else{
+                //CONTAMOS LAS MONEDAS BUENAS ESCAPADAS PARA AL LLEGAR A 3 FINALIZAR EL JUEGO
+                if(posMonedaY - radio == 0){
+                    contadorMonedasBuenasEscapadas += 1;
+                }
             }
-            if (puntuacion < 0){
+
+
+            //SI LA PUNTUACIÓN <= 0 DETENGO LA MÚSICA Y EFECTOS, MUESTRO UN MENSAJE DE GAME OVER Y PONGO EFECTO SONIDO FINAL
+            if (puntuacion < 0 || contadorMonedasMalasCogidas == 3 || contadorMonedasBuenasEscapadas == 4){
                 gameloop.stop();
                 gameloop.release();
                 monedaMala.release();
                 monedaBuena.release();
                 Toast toast = Toast.makeText(getContext(), "GAME OVER", Toast.LENGTH_SHORT);
                 toast.show();
-                gameloop = MediaPlayer.create(getContext(),R.raw.dun);
-                gameloop.start();
-
-
+                if(valorSonidos){
+                    gameloop = MediaPlayer.create(getContext(),R.raw.dun);
+                    gameloop.start();
+                }
 
             }
 
