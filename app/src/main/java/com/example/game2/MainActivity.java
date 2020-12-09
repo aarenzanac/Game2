@@ -58,12 +58,14 @@ public class MainActivity extends AppCompatActivity {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                 builder.setTitle("INSTRUCCIONES");
-                builder.setMessage("EL jueco consiste en atrapar las pelotas verdes (suman 2 puntos) evitando coger las pelotas rojas (restan 5 puntos)." +
-                        "Dispone de 3 vidas de la siguiente forma:" +
-                        "- No puede dejar escapar mas de 3 pelotas verdes. Si deja escapar 3, finaliza la partida." +
-                        "- No puede atrapar mas de 3 pelotas rojas. Si atrapa 3, finaliza la partida." +
-                        "- La puntuación no puede ser menor de 0 con lo que si recoge varias pelotas rojas y su puntuación baja de 0, funaliza la partida." +
-                        "¡¡¡Que se divierta!!!");
+                builder.setMessage("El juego consiste en atrapar las pelotas verdes (suman 2 puntos) evitando coger las pelotas rojas (restan 5 puntos).\n" +
+                        "Dispone de 3 vidas de la siguiente forma:\n" +
+                        "- No puede dejar escapar 3 pelotas verdes. Si deja escapar 3, finaliza la partida.\n" +
+                        "- No puede atrapar 3 pelotas rojas. Si atrapa 3, finaliza la partida.\n" +
+                        "- La puntuación no puede ser menor de 0 con lo que si recoge varias pelotas rojas y su puntuación baja de 0, finaliza la partida.\n" +
+                        "La difuciltad del juego irà en aumento, subiendo la velocidad de caida de las monedas, a medida que la partida va avanzando. \n" +
+                        "En la parte superior de la pantalla de juego encontraŕa la puntuación obtenida así como las monedas verdes escapadas y las rojas atrapadas.\n" +
+                        "¡¡¡Que se divierta!!!\n");
                 builder.setPositiveButton("Aceptar", null);
 
                 AlertDialog dialog = builder.create();
