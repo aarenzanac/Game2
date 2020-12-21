@@ -180,7 +180,7 @@ public class Juego extends View {
                 contadorMonedasMalasCogidas += 1;
                 if(contadorMonedasMalasCogidas == 1){
                     colorMonedaMala1 = Color.GRAY;
-                }else if(contadorMonedasBuenasEscapadas == 2){
+                }else if(contadorMonedasMalasCogidas == 2){
                     colorMonedaMala2 = Color.GRAY;
                 }
             }
