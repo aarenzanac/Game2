@@ -40,6 +40,7 @@ public class PantallaOpciones extends AppCompatActivity {
                 arrayIntent.add(valorMusica);
                 arrayIntent.add(valorSonidos);
 
+                //ESTABLECEMOS LOS PARAMETROS PARA PASAR EN EL INTENT
                 Bundle parametros = new Bundle();
                 parametros.putBoolean("musica", valorMusica);
                 parametros.putBoolean("sonidos", valorSonidos);

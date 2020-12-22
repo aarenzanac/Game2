@@ -1,6 +1,8 @@
 package com.example.game2;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -16,9 +18,10 @@ import android.widget.Toast;
 import java.util.Random;
 
 public class Juego extends View {
+        //DECLARACIÓN DE TODAS LAS VARIABLES
         public int ancho,alto;
         public float escala;
-        public int posX,posY,radio,posMonedaX,posMonedaY, posMonedaFalsaX, posMonedaFalsaY, avanceMonedas, contadorMonedasMalasCogidas, contadorMonedasBuenasEscapadas;
+        public int posX,posY,radioAspirina, radioPacman,posMonedaX,posMonedaY, posMonedaFalsaX, posMonedaFalsaY, avanceMonedas, contadorMonedasMalasCogidas, contadorMonedasBuenasEscapadas;
         private GestureDetector gestos;
         private RectF rectCesta;
         private RectF rectMoneda;
@@ -34,30 +37,44 @@ public class Juego extends View {
         private PantallaJuego pantallaJuego = new PantallaJuego();
         boolean valorMusica;
         boolean valorSonidos;
-        Paint fondo = new Paint();
+
+        //BITMAPS PARA ESTABLECER IMAGENES PARA EL FONDO Y PARA SUPERPONER A LOS CÍRCULOS.
+        Bitmap fondoPantalla;
+        Bitmap pacman =  BitmapFactory.decodeResource(getResources(),R.drawable.pacman);
+        Bitmap monedaFalsaImagen =  BitmapFactory.decodeResource(getResources(),R.drawable.pastilla_mala);
+        Bitmap pastillaBuenaImagen =  BitmapFactory.decodeResource(getResources(),R.drawable.aspirina);
+        Bitmap monedaFalsaCogidaImagen = BitmapFactory.decodeResource(getResources(),R.drawable.pastilla_mala_cogida);
+
+        //PAINTS PARA LOS CIRCULOS CESTA, CIRCULO BUENO, CIRCULO MALO, PUNTUACION Y TEXTOS DE TITULO DE VIDAS
+        //Paint fondo = new Paint();//ELIMINO ESTE PAINT PUESTO QUE HEMOS PUESTO UNA IMAGEN BITMAP DE FONDO DE PANTALLA
         Paint cesta = new Paint();
         Paint moneda = new Paint();
+        Paint monedaFalsa = new Paint();
         Paint puntos = new Paint();
         Paint tituloPuntos = new Paint();
         Paint tituloMonedasBuenas = new Paint();
         Paint tituloMonedasMalas = new Paint();
+
+        //PAINTS PARA PINTAR LOS CIRCULOS DE LAS VIDAS. MONEDAS MALAS COGIDAS Y BUENAS ESCAPADAS
         Paint vidaMonedaBuena1 = new Paint();
         Paint vidaMonedaMala1 = new Paint();
         Paint vidaMonedaBuena2 = new Paint();
         Paint vidaMonedaMala2 = new Paint();
         Paint vidaMonedaBuena3 = new Paint();
         Paint vidaMonedaMala3 = new Paint();
+
+        //COLORES DE LOS CÍRCULOS DE LAS VIDAS.
         int colorMonedaBuena1 = Color.GREEN;
         int colorMonedaBuena2 = Color.GREEN;
         int colorMonedaBuena3 = Color.GREEN;
         int colorMonedaMala1 = Color.RED;
         int colorMonedaMala2 = Color.RED;
         int colorMonedaMala3 = Color.RED;
+        Bitmap vidaMonedaFalsaImagen1 = monedaFalsaImagen;
+        Bitmap vidaMonedaFalsaImagen2 = monedaFalsaImagen;
+        Bitmap vidaMonedaFalsaImagen3 = monedaFalsaImagen;
 
 
-
-
-        //Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/fuente.ttf");
         public Juego(Context context) {
             super(context);
         }
@@ -92,8 +109,8 @@ public class Juego extends View {
                     //Elimino el movimiento vertical
                     //posY=(int)event.getY();
                     posX=(int)event.getX();
-                    radio=50;
-                    // invalidate llama al onDraw y vuelve a pintar la bola
+                    radioPacman=70;
+                    // invalidate llama al onDraw y vuelve a pintar el circulo
                     this.invalidate();
             }
             return true;
@@ -113,75 +130,89 @@ public class Juego extends View {
 
 
             //Definimos los colores de los objetos a pintar
-            //Bitmap res = BitmapFactory.decodeResource(getResources(),R.drawable.piranha);
-            //canvas.drawBitmap(res, 0, 0, null);
-            fondo.setColor(Color.BLACK);
-            //fondo.setStyle(Paint.Style.FILL_AND_STROKE);
-            cesta.setColor(Color.YELLOW);
+            //fondo.setColor(Color.BLACK); //ELIMINO EL COLOR PUESTO QUE HEMOS PUESTO IMAGEN DE FONDO.
+            //fondo.setStyle(Paint.Style.FILL_AND_STROKE); //ELIMINO EL ESTILO PUESTO QUE HEMOS PUESTO FONDO.
+
+            //ESTABLEZCO EL BITMAP CON LA IMAGEN DE FONDO DE PANTALLA
+            fondoPantalla = BitmapFactory.decodeResource(getResources(),R.drawable.fondo_pantalla_juego);
+
+            //cesta.setColor(Color.YELLOW); //ELIMINO EL COLOR PARA QUE NO SE VEA EL COLOR AMARILLO
             cesta.setStyle(Paint.Style.FILL_AND_STROKE);
             moneda.setColor(Color.GREEN);
             moneda.setStyle(Paint.Style.FILL_AND_STROKE);
             tituloPuntos.setTextSize(45);
             tituloPuntos.setTextAlign(Paint.Align.RIGHT);
-            tituloPuntos.setColor(Color.WHITE);
+            tituloPuntos.setColor(Color.BLACK);
             tituloMonedasBuenas.setTextSize(45);
             tituloMonedasBuenas.setTextAlign(Paint.Align.RIGHT);
-            tituloMonedasBuenas.setColor(Color.WHITE);
+            tituloMonedasBuenas.setColor(Color.BLACK);
             tituloMonedasMalas.setTextSize(45);
             tituloMonedasMalas.setTextAlign(Paint.Align.RIGHT);
-            tituloMonedasMalas.setColor(Color.WHITE);
+            tituloMonedasMalas.setColor(Color.BLACK);
             puntos.setTextAlign(Paint.Align.RIGHT);
             puntos.setTextSize(100);
-            puntos.setColor(Color.WHITE);
+            puntos.setColor(Color.BLACK);
             vidaMonedaBuena1.setColor(colorMonedaBuena1);
             vidaMonedaMala1.setColor(colorMonedaMala1);
+            vidaMonedaFalsaImagen1 = monedaFalsaImagen;
             vidaMonedaBuena2.setColor(colorMonedaBuena2);
             vidaMonedaMala2.setColor(colorMonedaMala2);
+            vidaMonedaFalsaImagen2 = monedaFalsaImagen;
             vidaMonedaBuena3.setColor(colorMonedaBuena3);
             vidaMonedaMala3.setColor(colorMonedaMala3);
-            // puntos.setTypeface(typeface);
+            vidaMonedaFalsaImagen3 = monedaFalsaImagen;
+
 
             //Pinto rectángulo con un ancho y alto de 1000 o de menos si la pantalla es menor.
-            canvas.drawRect(new Rect(0,0,(ancho),(alto)),fondo);
+            //canvas.drawRect(new Rect(0,0,(ancho),(alto)),fondo); //ELIMINO ESTE DRAWRECT PUESTO QUE PINTAREMOS CON DRAWBITMAP EL FONDO PANTALLA
+            canvas.drawBitmap(fondoPantalla, null, new Rect(0,0,(ancho),(alto)), null);
 
-            // Pinto la pelota
-            rectCesta= new RectF((posX-radio),(posY-radio),(posX+radio),(posY+radio));
+            // PINTO LA CESTA
+            rectCesta= new RectF((posX-radioPacman),(posY-radioPacman),(posX+radioPacman),(posY+radioPacman));
             canvas.drawOval(rectCesta,cesta);
+            canvas.drawBitmap(pacman, null, rectCesta, null);
 
-            //Pintamos moneda
+            //PINTAMOS LA PASTILLA BUENA
             if (posMonedaY>alto) {
                 posMonedaY=50;
                 posMonedaX= random.nextInt(ancho);
             }
-            rectMoneda = new RectF((posMonedaX-radio),(posMonedaY-radio),(posMonedaX+radio),(posMonedaY+radio));
+            rectMoneda = new RectF((posMonedaX-radioAspirina),(posMonedaY-radioAspirina),(posMonedaX+radioAspirina),(posMonedaY+radioAspirina));
             canvas.drawOval(rectMoneda,moneda);
+            canvas.drawBitmap(pastillaBuenaImagen, null, rectMoneda, null);
 
-            //Pintamos monnedaFalsa
-            Paint monedaFalsa = new Paint();
-            monedaFalsa.setColor(Color.RED);
-            monedaFalsa.setStyle(Paint.Style.FILL_AND_STROKE);
+            //PINTAMOS LA PASTILLA MALA
+
+            //monedaFalsa.setColor(Color.RED); //ELIMINO ESTE COLOR PUESTO QUE HEMOS SUPERPUESTO IMAGEN DE PASTILLA MALA
+            //monedaFalsa.setStyle(Paint.Style.FILL_AND_STROKE); //ELIMINO ESTE ESTILO PUESTO QUE HEMOS SUPERPUESTO IMAGEN DE PASTILLA MALA
             if (posMonedaFalsaY>alto) {
                 posMonedaFalsaY=50;
                 posMonedaFalsaX= random.nextInt(ancho);
             }
-            rectMonedaFalsa = new RectF((posMonedaFalsaX-radio),(posMonedaFalsaY-radio),(posMonedaFalsaX+radio),
-                    (posMonedaFalsaY+radio));
+            rectMonedaFalsa = new RectF((posMonedaFalsaX-radioAspirina),(posMonedaFalsaY-radioAspirina),(posMonedaFalsaX+radioAspirina),
+                    (posMonedaFalsaY+radioAspirina));
             canvas.drawOval(rectMonedaFalsa,monedaFalsa);
+
+            canvas.drawBitmap(monedaFalsaImagen, null, rectMonedaFalsa, null);
 
             // Calculo intersección
             if (RectF.intersects(rectCesta,rectMonedaFalsa)) {
                 if(valorSonidos){
                     monedaMala.start();
                 }
-                puntuacion -= 5;
+                puntuacion -= 3;
                 posMonedaFalsaY=50;
                 posMonedaFalsaX= random.nextInt(ancho);
-                //CONTAMOS LAS MONEDAS MALAS COGIDAS PARA FINALIZAR EL JUEGO AL LLEGAR A 3
+
+                //CONTAMOS LAS PASTILLAS MALAS COGIDAS PARA FINALIZAR EL JUEGO AL LLEGAR A 3
                 contadorMonedasMalasCogidas += 1;
                 if(contadorMonedasMalasCogidas == 1){
                     colorMonedaMala1 = Color.GRAY;
+                    vidaMonedaFalsaImagen1= monedaFalsaCogidaImagen;
+
                 }else if(contadorMonedasMalasCogidas == 2){
                     colorMonedaMala2 = Color.GRAY;
+                    vidaMonedaFalsaImagen2= monedaFalsaCogidaImagen;
                 }
             }
 
@@ -194,8 +225,9 @@ public class Juego extends View {
                 posMonedaY=60;
                 posMonedaX= random.nextInt(ancho);
             }else{
-                //CONTAMOS LAS MONEDAS BUENAS ESCAPADAS PARA AL LLEGAR A 3 FINALIZAR EL JUEGO
-                if(posMonedaY - radio == 0){
+
+                //CONTAMOS LAS PASTILLAS BUENAS ESCAPADAS PARA AL LLEGAR A 3 FINALIZAR EL JUEGO
+                if(posMonedaY - radioAspirina == 0){
                     contadorMonedasBuenasEscapadas += 1;
                     if(contadorMonedasBuenasEscapadas == 2){
                         colorMonedaBuena1 = Color.GRAY;
@@ -228,7 +260,7 @@ public class Juego extends View {
 
 
 
-            //CONTADOR DE MONEDAS BUENAS ESCAPADAS
+            //POSICIONAMIENTO DE CONTADOR DE PASTILLAS BUENAS ESCAPADAS
             rectVidaMonedaBuena1= new RectF(350, 150, 300 , 100);
             rectVidaMonedaBuena2= new RectF(450, 150, 400 , 100);
             rectVidaMonedaBuena3= new RectF(550, 150, 500 , 100);
@@ -236,13 +268,18 @@ public class Juego extends View {
             canvas.drawOval(rectVidaMonedaBuena2, vidaMonedaBuena2);
             canvas.drawOval(rectVidaMonedaBuena3, vidaMonedaBuena3);
 
-            //CONTADOR DE MONEDAS MALAS COGIDAS
+
+            //POSICIONAMIENTO DE CONTADOR DE PASTILLAS MALAS COGIDAS
             rectVidaMonedaMala1= new RectF(850, 150, 800 , 100);
             rectVidaMonedaMala2= new RectF(950, 150, 900 , 100);
             rectVidaMonedaMala3= new RectF(1050, 150, 1000 , 100);
             canvas.drawOval(rectVidaMonedaMala1, vidaMonedaMala1);
             canvas.drawOval(rectVidaMonedaMala2, vidaMonedaMala2);
             canvas.drawOval(rectVidaMonedaMala3, vidaMonedaMala3);
+            canvas.drawBitmap(vidaMonedaFalsaImagen1, null, rectVidaMonedaMala1, null);
+            canvas.drawBitmap(vidaMonedaFalsaImagen2, null, rectVidaMonedaMala2, null);
+            canvas.drawBitmap(vidaMonedaFalsaImagen3, null, rectVidaMonedaMala3, null);
+
 
 
 

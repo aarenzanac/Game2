@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         Button botonInstrucciones = findViewById(R.id.buttonInstrucciones);
 
 
-
+        //ACCIÓN PARA EL BOTON DE COMENZAR LA PARTIDA
         botonComenzar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
+        //ACCIÓN PARA EL BOTÓN DE LA PANTALLA DE OPCIONES
         botonOpciones.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //ACCION PARA EL BOTON SALIR
         botonSalir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,19 +53,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //ACCION PARA EL BOTON INSTRUCCIONES.
         botonInstrucciones.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                 builder.setTitle("INSTRUCCIONES");
-                builder.setMessage("El juego consiste en atrapar las pelotas verdes (suman 2 puntos) evitando coger las pelotas rojas (restan 5 puntos).\n" +
+                builder.setMessage("El juego consiste en atrapar las aspirinas (suman 2 puntos) evitando coger las pastillas venenosas (restan 3 puntos).\n" +
                         "Dispone de 3 vidas de la siguiente forma:\n" +
-                        "- No puede dejar escapar 3 pelotas verdes. Si deja escapar 3, finaliza la partida.\n" +
-                        "- No puede atrapar 3 pelotas rojas. Si atrapa 3, finaliza la partida.\n" +
-                        "- La puntuación no puede ser menor de 0 con lo que si recoge varias pelotas rojas y su puntuación baja de 0, finaliza la partida.\n" +
-                        "La difuciltad del juego irà en aumento, subiendo la velocidad de caida de las monedas, a medida que la partida va avanzando. \n" +
-                        "En la parte superior de la pantalla de juego encontraŕa la puntuación obtenida así como las monedas verdes escapadas y las rojas atrapadas.\n" +
+                        "- No puede dejar escapar 3 aspirinas. Si deja escapar 3, finaliza la partida.\n" +
+                        "- No puede atrapar 3 pastillas venenosas. Si atrapa 3, finaliza la partida.\n" +
+                        "- La puntuación no puede ser menor de 0 con lo que si recoge varias pastillas venenosas y su puntuación baja de 0, finaliza la partida.\n" +
+                        "La difuciltad del juego irà en aumento, subiendo la velocidad de caida de las pastillas, a medida que la partida va avanzando. \n" +
+                        "En la parte superior de la pantalla de juego encontraŕa la puntuación obtenida así como las aspirinas escapadas (en color verde)y las pastillas venenosas atrapadas (en rojo).\n" +
                         "¡¡¡Que se divierta!!!\n");
                 builder.setPositiveButton("Aceptar", null);
 

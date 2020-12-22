@@ -15,13 +15,14 @@ public class PantallaJuego extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        //OBTENEMOS LOS VALORES DE MUSICA Y SONIDO DE LA PANTALLA OPCIONES
+        //OBTENEMOS LOS VALORES DE MUSICA Y SONIDO DEL INTENT DE LA PANTALLA OPCIONES
         boolean valorMusica = getIntent().getBooleanExtra("musica", true);
         boolean valorSonidos = getIntent().getBooleanExtra("sonidos", true);
 
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_pantalla_juego);
+        getSupportActionBar().hide();
 
         juego = (Juego) findViewById(R.id.Pantalla);
 
@@ -35,7 +36,8 @@ public class PantallaJuego extends AppCompatActivity {
                 juego.alto = juego.getHeight();
                 juego.posX=juego.ancho/2;
                 juego.posY=juego.alto-50;
-                juego.radio=50;
+                juego.radioPacman=75;
+                juego.radioAspirina = 50;
                 juego.posMonedaY=50;
                 juego.posMonedaFalsaX=200;
                 juego.avanceMonedas = 10;
