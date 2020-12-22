@@ -30,9 +30,9 @@ public class Juego extends View {
         public RectF rectVidaPastillaMala1, rectVidaPastillaMala2, rectVidaPastillaMala3;
         public Integer puntuacion = 0;
         private Random random = new Random();
-        private MediaPlayer gameloop = new MediaPlayer();
-        private MediaPlayer pastillaBuena = new MediaPlayer();
-        private MediaPlayer pastillaMala = new MediaPlayer();
+        private MediaPlayer gameloopSound = new MediaPlayer();
+        private MediaPlayer pastillaBuenaSound = new MediaPlayer();
+        private MediaPlayer pastillaMalaSound = new MediaPlayer();
         private PantallaOpciones pantallaOpciones = new PantallaOpciones();
         private PantallaJuego pantallaJuego = new PantallaJuego();
         boolean valorMusica;
@@ -48,8 +48,8 @@ public class Juego extends View {
         //PAINTS PARA LOS CIRCULOS PACMAN, CIRCULO PASTILLA BUENA, CIRCULO PASTILLA MALA, PUNTUACION Y TEXTOS DE TITULO DE VIDAS
         //Paint fondo = new Paint();//ELIMINO ESTE PAINT PUESTO QUE HEMOS PUESTO UNA IMAGEN BITMAP DE FONDO DE PANTALLA
         Paint circuloPacman = new Paint();
-        Paint moneda = new Paint();
-        Paint monedaFalsa = new Paint();
+        Paint pastilla = new Paint();
+        Paint pastillaMala = new Paint();
         Paint puntos = new Paint();
         Paint tituloPuntos = new Paint();
         Paint tituloPastillasBuenas = new Paint();
@@ -83,15 +83,15 @@ public class Juego extends View {
         public Juego(Context context, AttributeSet attrs) {
             super(context, attrs);
 
-            gameloop = MediaPlayer.create(context,R.raw.musica);
-            pastillaBuena = MediaPlayer.create(context,R.raw.coin);
-            pastillaMala = MediaPlayer.create(context,R.raw.roto);
+            gameloopSound = MediaPlayer.create(context,R.raw.musica);
+            pastillaBuenaSound = MediaPlayer.create(context,R.raw.coin);
+            pastillaMalaSound = MediaPlayer.create(context,R.raw.roto);
 
             //EJECUTA LA CANCIÓN EN LOOP SIN FINAL
-            gameloop.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            gameloopSound.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
-                    gameloop.start();
+                    gameloopSound.start();
                 }
             });
         }
@@ -124,7 +124,7 @@ public class Juego extends View {
         protected void onDraw(Canvas canvas) {
             super.onDraw(canvas);
             if(valorMusica){
-                gameloop.start();
+                gameloopSound.start();
 
             }
 
@@ -138,8 +138,8 @@ public class Juego extends View {
 
             circuloPacman.setColor(Color.TRANSPARENT);
             //circuloPacman.setStyle(Paint.Style.FILL_AND_STROKE);
-            moneda.setColor(Color.GREEN);
-            moneda.setStyle(Paint.Style.FILL_AND_STROKE);
+            //pastilla.setColor(Color.GREEN);
+            //pastilla.setStyle(Paint.Style.FILL_AND_STROKE);
             tituloPuntos.setTextSize(45);
             tituloPuntos.setTextAlign(Paint.Align.RIGHT);
             tituloPuntos.setColor(Color.BLACK);
@@ -178,7 +178,7 @@ public class Juego extends View {
                 posPastillaX= random.nextInt(ancho);
             }
             rectMoneda = new RectF((posPastillaX-radioAspirina),(posPastillaY-radioAspirina),(posPastillaX+radioAspirina),(posPastillaY+radioAspirina));
-            canvas.drawOval(rectMoneda,moneda);
+            canvas.drawOval(rectMoneda,pastilla);
             canvas.drawBitmap(pastillaBuenaImagen, null, rectMoneda, null);
 
             //PINTAMOS LA PASTILLA MALA
@@ -191,14 +191,14 @@ public class Juego extends View {
             }
             rectPastillaFalsa = new RectF((posPastillaMalaX-radioAspirina),(posPastillaMalaY-radioAspirina),(posPastillaMalaX+radioAspirina),
                     (posPastillaMalaY+radioAspirina));
-            canvas.drawOval(rectPastillaFalsa,monedaFalsa);
+            canvas.drawOval(rectPastillaFalsa,pastillaMala);
 
             canvas.drawBitmap(pastillaMalaImagen, null, rectPastillaFalsa, null);
 
             // Calculo intersección
             if (RectF.intersects(rectPacman,rectPastillaFalsa)) {
                 if(valorSonidos){
-                    pastillaMala.start();
+                    pastillaMalaSound.start();
                 }
                 puntuacion -= 3;
                 posPastillaMalaY=50;
@@ -219,7 +219,7 @@ public class Juego extends View {
             // Calculo intersección
             if (RectF.intersects(rectPacman,rectMoneda)) {
                 if(valorSonidos){
-                    pastillaBuena.start();
+                    pastillaBuenaSound.start();
                 }
                 puntuacion += 2;
                 posPastillaY=60;
@@ -240,15 +240,15 @@ public class Juego extends View {
 
             //SI LA PUNTUACIÓN <= 0 DETENGO LA MÚSICA Y EFECTOS, MUESTRO UN MENSAJE DE GAME OVER Y PONGO EFECTO SONIDO FINAL
             if (puntuacion < 0 || contadorPastillasMalasCogidas == 3 || contadorPastillasBuenasEscapadas == 4){
-                gameloop.stop();
-                gameloop.release();
-                pastillaMala.release();
-                pastillaBuena.release();
+                gameloopSound.stop();
+                gameloopSound.release();
+                pastillaMalaSound.release();
+                pastillaBuenaSound.release();
                 Toast toast = Toast.makeText(getContext(), "GAME OVER", Toast.LENGTH_SHORT);
                 toast.show();
                 if(valorSonidos){
-                    gameloop = MediaPlayer.create(getContext(),R.raw.dun);
-                    gameloop.start();
+                    gameloopSound = MediaPlayer.create(getContext(),R.raw.dun);
+                    gameloopSound.start();
                 }
 
             }
