@@ -21,18 +21,18 @@ public class Juego extends View {
         //DECLARACIÓN DE TODAS LAS VARIABLES
         public int ancho,alto;
         public float escala;
-        public int posX,posY,radioAspirina, radioPacman,posMonedaX,posMonedaY, posMonedaFalsaX, posMonedaFalsaY, avanceMonedas, contadorMonedasMalasCogidas, contadorMonedasBuenasEscapadas;
+        public int posX,posY,radioAspirina, radioPacman, posPastillaX, posPastillaY, posPastillaMalaX, posPastillaMalaY, avancePastillas, contadorPastillasMalasCogidas, contadorPastillasBuenasEscapadas;
         private GestureDetector gestos;
-        private RectF rectCesta;
+        private RectF rectPacman;
         private RectF rectMoneda;
-        private RectF rectMonedaFalsa;
-        public RectF rectVidaMonedaBuena1, rectVidaMonedaBuena2, rectVidaMonedaBuena3;
-        public RectF rectVidaMonedaMala1, rectVidaMonedaMala2, rectVidaMonedaMala3;
+        private RectF rectPastillaFalsa;
+        public RectF rectVidaPastillaBuena1, rectVidaPastillaBuena2, rectVidaPastillaBuena3;
+        public RectF rectVidaPastillaMala1, rectVidaPastillaMala2, rectVidaPastillaMala3;
         public Integer puntuacion = 0;
         private Random random = new Random();
         private MediaPlayer gameloop = new MediaPlayer();
-        private MediaPlayer monedaBuena = new MediaPlayer();
-        private MediaPlayer monedaMala = new MediaPlayer();
+        private MediaPlayer pastillaBuena = new MediaPlayer();
+        private MediaPlayer pastillaMala = new MediaPlayer();
         private PantallaOpciones pantallaOpciones = new PantallaOpciones();
         private PantallaJuego pantallaJuego = new PantallaJuego();
         boolean valorMusica;
@@ -41,38 +41,38 @@ public class Juego extends View {
         //BITMAPS PARA ESTABLECER IMAGENES PARA EL FONDO Y PARA SUPERPONER A LOS CÍRCULOS.
         Bitmap fondoPantalla;
         Bitmap pacman =  BitmapFactory.decodeResource(getResources(),R.drawable.pacman);
-        Bitmap monedaFalsaImagen =  BitmapFactory.decodeResource(getResources(),R.drawable.pastilla_mala);
+        Bitmap pastillaMalaImagen =  BitmapFactory.decodeResource(getResources(),R.drawable.pastilla_mala);
         Bitmap pastillaBuenaImagen =  BitmapFactory.decodeResource(getResources(),R.drawable.aspirina);
         Bitmap monedaFalsaCogidaImagen = BitmapFactory.decodeResource(getResources(),R.drawable.pastilla_mala_cogida);
 
-        //PAINTS PARA LOS CIRCULOS CESTA, CIRCULO BUENO, CIRCULO MALO, PUNTUACION Y TEXTOS DE TITULO DE VIDAS
+        //PAINTS PARA LOS CIRCULOS PACMAN, CIRCULO PASTILLA BUENA, CIRCULO PASTILLA MALA, PUNTUACION Y TEXTOS DE TITULO DE VIDAS
         //Paint fondo = new Paint();//ELIMINO ESTE PAINT PUESTO QUE HEMOS PUESTO UNA IMAGEN BITMAP DE FONDO DE PANTALLA
-        Paint cesta = new Paint();
+        Paint circuloPacman = new Paint();
         Paint moneda = new Paint();
         Paint monedaFalsa = new Paint();
         Paint puntos = new Paint();
         Paint tituloPuntos = new Paint();
-        Paint tituloMonedasBuenas = new Paint();
-        Paint tituloMonedasMalas = new Paint();
+        Paint tituloPastillasBuenas = new Paint();
+        Paint tituloPastillasMalas = new Paint();
 
         //PAINTS PARA PINTAR LOS CIRCULOS DE LAS VIDAS. MONEDAS MALAS COGIDAS Y BUENAS ESCAPADAS
-        Paint vidaMonedaBuena1 = new Paint();
-        Paint vidaMonedaMala1 = new Paint();
-        Paint vidaMonedaBuena2 = new Paint();
-        Paint vidaMonedaMala2 = new Paint();
-        Paint vidaMonedaBuena3 = new Paint();
-        Paint vidaMonedaMala3 = new Paint();
+        Paint vidaPastillaBuena1 = new Paint();
+        Paint vidaPastillaMala1 = new Paint();
+        Paint vidaPastillaBuena2 = new Paint();
+        Paint vidaPastillaMala2 = new Paint();
+        Paint vidaPastillaBuena3 = new Paint();
+        Paint vidaPastillaMala3 = new Paint();
 
         //COLORES DE LOS CÍRCULOS DE LAS VIDAS.
-        int colorMonedaBuena1 = Color.GREEN;
-        int colorMonedaBuena2 = Color.GREEN;
-        int colorMonedaBuena3 = Color.GREEN;
-        int colorMonedaMala1 = Color.RED;
-        int colorMonedaMala2 = Color.RED;
-        int colorMonedaMala3 = Color.RED;
-        Bitmap vidaMonedaFalsaImagen1 = monedaFalsaImagen;
-        Bitmap vidaMonedaFalsaImagen2 = monedaFalsaImagen;
-        Bitmap vidaMonedaFalsaImagen3 = monedaFalsaImagen;
+        int colorPastillaBuena1 = Color.GREEN;
+        int colorPastillaBuena2 = Color.GREEN;
+        int colorPastillaBuena3 = Color.GREEN;
+        int colorPastillaMala1 = Color.RED;
+        int colorPastillaMala2 = Color.RED;
+        int colorPastillaMala3 = Color.RED;
+        Bitmap vidaPastillaMalaImagen1 = pastillaMalaImagen;
+        Bitmap vidaPastillaMalaImagen2 = pastillaMalaImagen;
+        Bitmap vidaPastillaMalaImagen3 = pastillaMalaImagen;
 
 
         public Juego(Context context) {
@@ -84,8 +84,8 @@ public class Juego extends View {
             super(context, attrs);
 
             gameloop = MediaPlayer.create(context,R.raw.musica);
-            monedaBuena = MediaPlayer.create(context,R.raw.coin);
-            monedaMala = MediaPlayer.create(context,R.raw.roto);
+            pastillaBuena = MediaPlayer.create(context,R.raw.coin);
+            pastillaMala = MediaPlayer.create(context,R.raw.roto);
 
             //EJECUTA LA CANCIÓN EN LOOP SIN FINAL
             gameloop.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -136,48 +136,48 @@ public class Juego extends View {
             //ESTABLEZCO EL BITMAP CON LA IMAGEN DE FONDO DE PANTALLA
             fondoPantalla = BitmapFactory.decodeResource(getResources(),R.drawable.fondo_pantalla_juego);
 
-            //cesta.setColor(Color.YELLOW); //ELIMINO EL COLOR PARA QUE NO SE VEA EL COLOR AMARILLO
-            cesta.setStyle(Paint.Style.FILL_AND_STROKE);
+            circuloPacman.setColor(Color.TRANSPARENT);
+            //circuloPacman.setStyle(Paint.Style.FILL_AND_STROKE);
             moneda.setColor(Color.GREEN);
             moneda.setStyle(Paint.Style.FILL_AND_STROKE);
             tituloPuntos.setTextSize(45);
             tituloPuntos.setTextAlign(Paint.Align.RIGHT);
             tituloPuntos.setColor(Color.BLACK);
-            tituloMonedasBuenas.setTextSize(45);
-            tituloMonedasBuenas.setTextAlign(Paint.Align.RIGHT);
-            tituloMonedasBuenas.setColor(Color.BLACK);
-            tituloMonedasMalas.setTextSize(45);
-            tituloMonedasMalas.setTextAlign(Paint.Align.RIGHT);
-            tituloMonedasMalas.setColor(Color.BLACK);
+            tituloPastillasBuenas.setTextSize(40);
+            tituloPastillasBuenas.setTextAlign(Paint.Align.RIGHT);
+            tituloPastillasBuenas.setColor(Color.BLACK);
+            tituloPastillasMalas.setTextSize(40);
+            tituloPastillasMalas.setTextAlign(Paint.Align.RIGHT);
+            tituloPastillasMalas.setColor(Color.BLACK);
             puntos.setTextAlign(Paint.Align.RIGHT);
             puntos.setTextSize(100);
             puntos.setColor(Color.BLACK);
-            vidaMonedaBuena1.setColor(colorMonedaBuena1);
-            vidaMonedaMala1.setColor(colorMonedaMala1);
-            vidaMonedaFalsaImagen1 = monedaFalsaImagen;
-            vidaMonedaBuena2.setColor(colorMonedaBuena2);
-            vidaMonedaMala2.setColor(colorMonedaMala2);
-            vidaMonedaFalsaImagen2 = monedaFalsaImagen;
-            vidaMonedaBuena3.setColor(colorMonedaBuena3);
-            vidaMonedaMala3.setColor(colorMonedaMala3);
-            vidaMonedaFalsaImagen3 = monedaFalsaImagen;
+            vidaPastillaBuena1.setColor(colorPastillaBuena1);
+            vidaPastillaMala1.setColor(colorPastillaMala1);
+            vidaPastillaMalaImagen1 = pastillaMalaImagen;
+            vidaPastillaBuena2.setColor(colorPastillaBuena2);
+            vidaPastillaMala2.setColor(colorPastillaMala2);
+            vidaPastillaMalaImagen2 = pastillaMalaImagen;
+            vidaPastillaBuena3.setColor(colorPastillaBuena3);
+            vidaPastillaMala3.setColor(colorPastillaMala3);
+            vidaPastillaMalaImagen3 = pastillaMalaImagen;
 
 
             //Pinto rectángulo con un ancho y alto de 1000 o de menos si la pantalla es menor.
             //canvas.drawRect(new Rect(0,0,(ancho),(alto)),fondo); //ELIMINO ESTE DRAWRECT PUESTO QUE PINTAREMOS CON DRAWBITMAP EL FONDO PANTALLA
             canvas.drawBitmap(fondoPantalla, null, new Rect(0,0,(ancho),(alto)), null);
 
-            // PINTO LA CESTA
-            rectCesta= new RectF((posX-radioPacman),(posY-radioPacman),(posX+radioPacman),(posY+radioPacman));
-            canvas.drawOval(rectCesta,cesta);
-            canvas.drawBitmap(pacman, null, rectCesta, null);
+            // PINTO A PACMAN
+            rectPacman= new RectF((posX-radioPacman),(posY-radioPacman),(posX+radioPacman),(posY+radioPacman));
+            canvas.drawOval(rectPacman,circuloPacman);
+            canvas.drawBitmap(pacman, null, rectPacman, null);
 
             //PINTAMOS LA PASTILLA BUENA
-            if (posMonedaY>alto) {
-                posMonedaY=50;
-                posMonedaX= random.nextInt(ancho);
+            if (posPastillaY>alto) {
+                posPastillaY=50;
+                posPastillaX= random.nextInt(ancho);
             }
-            rectMoneda = new RectF((posMonedaX-radioAspirina),(posMonedaY-radioAspirina),(posMonedaX+radioAspirina),(posMonedaY+radioAspirina));
+            rectMoneda = new RectF((posPastillaX-radioAspirina),(posPastillaY-radioAspirina),(posPastillaX+radioAspirina),(posPastillaY+radioAspirina));
             canvas.drawOval(rectMoneda,moneda);
             canvas.drawBitmap(pastillaBuenaImagen, null, rectMoneda, null);
 
@@ -185,65 +185,65 @@ public class Juego extends View {
 
             //monedaFalsa.setColor(Color.RED); //ELIMINO ESTE COLOR PUESTO QUE HEMOS SUPERPUESTO IMAGEN DE PASTILLA MALA
             //monedaFalsa.setStyle(Paint.Style.FILL_AND_STROKE); //ELIMINO ESTE ESTILO PUESTO QUE HEMOS SUPERPUESTO IMAGEN DE PASTILLA MALA
-            if (posMonedaFalsaY>alto) {
-                posMonedaFalsaY=50;
-                posMonedaFalsaX= random.nextInt(ancho);
+            if (posPastillaMalaY>alto) {
+                posPastillaMalaY=50;
+                posPastillaMalaX= random.nextInt(ancho);
             }
-            rectMonedaFalsa = new RectF((posMonedaFalsaX-radioAspirina),(posMonedaFalsaY-radioAspirina),(posMonedaFalsaX+radioAspirina),
-                    (posMonedaFalsaY+radioAspirina));
-            canvas.drawOval(rectMonedaFalsa,monedaFalsa);
+            rectPastillaFalsa = new RectF((posPastillaMalaX-radioAspirina),(posPastillaMalaY-radioAspirina),(posPastillaMalaX+radioAspirina),
+                    (posPastillaMalaY+radioAspirina));
+            canvas.drawOval(rectPastillaFalsa,monedaFalsa);
 
-            canvas.drawBitmap(monedaFalsaImagen, null, rectMonedaFalsa, null);
+            canvas.drawBitmap(pastillaMalaImagen, null, rectPastillaFalsa, null);
 
             // Calculo intersección
-            if (RectF.intersects(rectCesta,rectMonedaFalsa)) {
+            if (RectF.intersects(rectPacman,rectPastillaFalsa)) {
                 if(valorSonidos){
-                    monedaMala.start();
+                    pastillaMala.start();
                 }
                 puntuacion -= 3;
-                posMonedaFalsaY=50;
-                posMonedaFalsaX= random.nextInt(ancho);
+                posPastillaMalaY=50;
+                posPastillaMalaX = random.nextInt(ancho);
 
                 //CONTAMOS LAS PASTILLAS MALAS COGIDAS PARA FINALIZAR EL JUEGO AL LLEGAR A 3
-                contadorMonedasMalasCogidas += 1;
-                if(contadorMonedasMalasCogidas == 1){
-                    colorMonedaMala1 = Color.GRAY;
-                    vidaMonedaFalsaImagen1= monedaFalsaCogidaImagen;
+                contadorPastillasMalasCogidas += 1;
+                if(contadorPastillasMalasCogidas == 1){
+                    colorPastillaMala1 = Color.GRAY;
+                    vidaPastillaMalaImagen1= monedaFalsaCogidaImagen;
 
-                }else if(contadorMonedasMalasCogidas == 2){
-                    colorMonedaMala2 = Color.GRAY;
-                    vidaMonedaFalsaImagen2= monedaFalsaCogidaImagen;
+                }else if(contadorPastillasMalasCogidas == 2){
+                    colorPastillaMala2 = Color.GRAY;
+                    vidaPastillaMalaImagen2= monedaFalsaCogidaImagen;
                 }
             }
 
             // Calculo intersección
-            if (RectF.intersects(rectCesta,rectMoneda)) {
+            if (RectF.intersects(rectPacman,rectMoneda)) {
                 if(valorSonidos){
-                    monedaBuena.start();
+                    pastillaBuena.start();
                 }
                 puntuacion += 2;
-                posMonedaY=60;
-                posMonedaX= random.nextInt(ancho);
+                posPastillaY=60;
+                posPastillaX= random.nextInt(ancho);
             }else{
 
                 //CONTAMOS LAS PASTILLAS BUENAS ESCAPADAS PARA AL LLEGAR A 3 FINALIZAR EL JUEGO
-                if(posMonedaY - radioAspirina == 0){
-                    contadorMonedasBuenasEscapadas += 1;
-                    if(contadorMonedasBuenasEscapadas == 2){
-                        colorMonedaBuena1 = Color.GRAY;
-                    }else if(contadorMonedasBuenasEscapadas == 3){
-                        colorMonedaBuena2 = Color.GRAY;
+                if(posPastillaY - radioAspirina == 0){
+                    contadorPastillasBuenasEscapadas += 1;
+                    if(contadorPastillasBuenasEscapadas == 2){
+                        colorPastillaBuena1 = Color.GRAY;
+                    }else if(contadorPastillasBuenasEscapadas == 3){
+                        colorPastillaBuena2 = Color.GRAY;
                     }
                 }
             }
 
 
             //SI LA PUNTUACIÓN <= 0 DETENGO LA MÚSICA Y EFECTOS, MUESTRO UN MENSAJE DE GAME OVER Y PONGO EFECTO SONIDO FINAL
-            if (puntuacion < 0 || contadorMonedasMalasCogidas == 3 || contadorMonedasBuenasEscapadas == 4){
+            if (puntuacion < 0 || contadorPastillasMalasCogidas == 3 || contadorPastillasBuenasEscapadas == 4){
                 gameloop.stop();
                 gameloop.release();
-                monedaMala.release();
-                monedaBuena.release();
+                pastillaMala.release();
+                pastillaBuena.release();
                 Toast toast = Toast.makeText(getContext(), "GAME OVER", Toast.LENGTH_SHORT);
                 toast.show();
                 if(valorSonidos){
@@ -255,30 +255,30 @@ public class Juego extends View {
 
             canvas.drawText(puntuacion.toString(), 150,150,puntos);
             canvas.drawText("PUNTOS", 200,50,tituloPuntos);
-            canvas.drawText("MONEDAS BUENAS", 680,50,tituloMonedasBuenas);
-            canvas.drawText("MODEDAS MALAS", 1150,50,tituloMonedasMalas);
+            canvas.drawText("PASTILLAS BUENAS", 650,50,tituloPastillasBuenas);
+            canvas.drawText("PASTILLAS MALAS", 1080,50,tituloPastillasMalas);
 
 
 
             //POSICIONAMIENTO DE CONTADOR DE PASTILLAS BUENAS ESCAPADAS
-            rectVidaMonedaBuena1= new RectF(350, 150, 300 , 100);
-            rectVidaMonedaBuena2= new RectF(450, 150, 400 , 100);
-            rectVidaMonedaBuena3= new RectF(550, 150, 500 , 100);
-            canvas.drawOval(rectVidaMonedaBuena1, vidaMonedaBuena1);
-            canvas.drawOval(rectVidaMonedaBuena2, vidaMonedaBuena2);
-            canvas.drawOval(rectVidaMonedaBuena3, vidaMonedaBuena3);
+            rectVidaPastillaBuena1= new RectF(350, 150, 300 , 100);
+            rectVidaPastillaBuena2= new RectF(450, 150, 400 , 100);
+            rectVidaPastillaBuena3= new RectF(550, 150, 500 , 100);
+            canvas.drawOval(rectVidaPastillaBuena1, vidaPastillaBuena1);
+            canvas.drawOval(rectVidaPastillaBuena2, vidaPastillaBuena2);
+            canvas.drawOval(rectVidaPastillaBuena3, vidaPastillaBuena3);
 
 
             //POSICIONAMIENTO DE CONTADOR DE PASTILLAS MALAS COGIDAS
-            rectVidaMonedaMala1= new RectF(850, 150, 800 , 100);
-            rectVidaMonedaMala2= new RectF(950, 150, 900 , 100);
-            rectVidaMonedaMala3= new RectF(1050, 150, 1000 , 100);
-            canvas.drawOval(rectVidaMonedaMala1, vidaMonedaMala1);
-            canvas.drawOval(rectVidaMonedaMala2, vidaMonedaMala2);
-            canvas.drawOval(rectVidaMonedaMala3, vidaMonedaMala3);
-            canvas.drawBitmap(vidaMonedaFalsaImagen1, null, rectVidaMonedaMala1, null);
-            canvas.drawBitmap(vidaMonedaFalsaImagen2, null, rectVidaMonedaMala2, null);
-            canvas.drawBitmap(vidaMonedaFalsaImagen3, null, rectVidaMonedaMala3, null);
+            rectVidaPastillaMala1= new RectF(800, 150, 750 , 100);
+            rectVidaPastillaMala2= new RectF(900, 150, 850 , 100);
+            rectVidaPastillaMala3= new RectF(1000, 150, 950 , 100);
+            canvas.drawOval(rectVidaPastillaMala1, vidaPastillaMala1);
+            canvas.drawOval(rectVidaPastillaMala2, vidaPastillaMala2);
+            canvas.drawOval(rectVidaPastillaMala3, vidaPastillaMala3);
+            canvas.drawBitmap(vidaPastillaMalaImagen1, null, rectVidaPastillaMala1, null);
+            canvas.drawBitmap(vidaPastillaMalaImagen2, null, rectVidaPastillaMala2, null);
+            canvas.drawBitmap(vidaPastillaMalaImagen3, null, rectVidaPastillaMala3, null);
 
 
 

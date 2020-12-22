@@ -38,13 +38,13 @@ public class PantallaJuego extends AppCompatActivity {
                 juego.posY=juego.alto-50;
                 juego.radioPacman=75;
                 juego.radioAspirina = 50;
-                juego.posMonedaY=50;
-                juego.posMonedaFalsaX=200;
-                juego.avanceMonedas = 10;
+                juego.posPastillaY=50;
+                juego.posPastillaMalaX =200;
+                juego.avancePastillas = 10;
                 juego.valorMusica = valorMusica;
                 juego.valorSonidos = valorSonidos;
-                juego.contadorMonedasMalasCogidas = 0;
-                juego.contadorMonedasBuenasEscapadas = 0;
+                juego.contadorPastillasMalasCogidas = 0;
+                juego.contadorPastillasBuenasEscapadas = 0;
             }
         });
         //TIMER PARA HACER EL AVANCE DE LAS MONEDAS. CADA 15 MILISEGUNDOS AVANZA. SI NUESTRA PUNTUACIÓN ES MENOR O IGUAL A 0, COGEMOS 3 MALAS O DEJAMOS ESCAPAR 3 BUENAS, GAME OVER
@@ -55,12 +55,12 @@ public class PantallaJuego extends AppCompatActivity {
                 handler.post(new Runnable() {
                     public void run() {
                         //Cada x segundos movemos la moneda 10dp
-                        juego.posMonedaY += juego.avanceMonedas;
-                        juego.posMonedaFalsaY += juego.avanceMonedas;
+                        juego.posPastillaY += juego.avancePastillas;
+                        juego.posPastillaMalaY += juego.avancePastillas;
 
                         //refresca la pantalla y llama al draw
                         juego.invalidate();
-                        if (juego.puntuacion < 0 || juego.contadorMonedasMalasCogidas == 3 || juego.contadorMonedasBuenasEscapadas == 4){
+                        if (juego.puntuacion < 0 || juego.contadorPastillasMalasCogidas == 3 || juego.contadorPastillasBuenasEscapadas == 4){
 
                             timer.cancel();
                             finish();
@@ -77,7 +77,7 @@ public class PantallaJuego extends AppCompatActivity {
             public void run() {
                 handler.post(new Runnable() {
                     public void run() {
-                        juego.avanceMonedas += 5;
+                        juego.avancePastillas += 5;
 
                     }
                 });
