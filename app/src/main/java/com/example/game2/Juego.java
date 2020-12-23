@@ -30,7 +30,7 @@ public class Juego extends View {
         public RectF rectVidaPastillaMala1, rectVidaPastillaMala2, rectVidaPastillaMala3;
         public Integer puntuacion = 0;
         private Random random = new Random();
-        private MediaPlayer gameloopSound = new MediaPlayer();
+        public MediaPlayer gameloopSound = new MediaPlayer();
         private MediaPlayer pastillaBuenaSound = new MediaPlayer();
         private MediaPlayer pastillaMalaSound = new MediaPlayer();
         private PantallaOpciones pantallaOpciones = new PantallaOpciones();
@@ -75,6 +75,7 @@ public class Juego extends View {
         Bitmap vidaPastillaMalaImagen3 = pastillaMalaImagen;
 
 
+
         public Juego(Context context) {
             super(context);
         }
@@ -95,6 +96,7 @@ public class Juego extends View {
                 }
             });
         }
+
 
         //FUNCIÓN PARA DETECTAR LOS MOVIMIENTOS DEL USUARIO. PULSAR, SOLTAR Y ARRASTRAR.
         @Override
@@ -119,6 +121,7 @@ public class Juego extends View {
             super(context, attrs, defStyle);
         }
 
+
         //PINTAMOS TODOS LOS ELEMENTOS DEL JUEGO
         @Override
         protected void onDraw(Canvas canvas) {
@@ -137,6 +140,9 @@ public class Juego extends View {
             fondoPantalla = BitmapFactory.decodeResource(getResources(),R.drawable.fondo_pantalla_juego);
 
             circuloPacman.setColor(Color.TRANSPARENT);
+            circuloPacman.setAntiAlias(true);
+            circuloPacman.setFilterBitmap(true);
+            circuloPacman.setDither(true);
             //circuloPacman.setStyle(Paint.Style.FILL_AND_STROKE);
             //pastilla.setColor(Color.GREEN);
             //pastilla.setStyle(Paint.Style.FILL_AND_STROKE);
@@ -173,6 +179,10 @@ public class Juego extends View {
             canvas.drawBitmap(pacman, null, rectPacman, null);
 
             //PINTAMOS LA PASTILLA BUENA
+            pastilla.setAntiAlias(true);
+            pastilla.setFilterBitmap(true);
+            pastilla.setDither(true);
+
             if (posPastillaY>alto) {
                 posPastillaY=50;
                 posPastillaX= random.nextInt(ancho);
@@ -183,8 +193,11 @@ public class Juego extends View {
 
             //PINTAMOS LA PASTILLA MALA
 
-            //monedaFalsa.setColor(Color.RED); //ELIMINO ESTE COLOR PUESTO QUE HEMOS SUPERPUESTO IMAGEN DE PASTILLA MALA
-            //monedaFalsa.setStyle(Paint.Style.FILL_AND_STROKE); //ELIMINO ESTE ESTILO PUESTO QUE HEMOS SUPERPUESTO IMAGEN DE PASTILLA MALA
+            //pastillaMala.setColor(Color.RED); //ELIMINO ESTE COLOR PUESTO QUE HEMOS SUPERPUESTO IMAGEN DE PASTILLA MALA
+            //pastillaMala.setStyle(Paint.Style.FILL_AND_STROKE); //ELIMINO ESTE ESTILO PUESTO QUE HEMOS SUPERPUESTO IMAGEN DE PASTILLA MALA
+            pastillaMala.setAntiAlias(true);
+            pastillaMala.setFilterBitmap(true);
+            pastillaMala.setDither(true);
             if (posPastillaMalaY>alto) {
                 posPastillaMalaY=50;
                 posPastillaMalaX= random.nextInt(ancho);
@@ -276,12 +289,6 @@ public class Juego extends View {
             canvas.drawOval(rectVidaPastillaMala1, vidaPastillaMala1);
             canvas.drawOval(rectVidaPastillaMala2, vidaPastillaMala2);
             canvas.drawOval(rectVidaPastillaMala3, vidaPastillaMala3);
-            canvas.drawBitmap(vidaPastillaMalaImagen1, null, rectVidaPastillaMala1, null);
-            canvas.drawBitmap(vidaPastillaMalaImagen2, null, rectVidaPastillaMala2, null);
-            canvas.drawBitmap(vidaPastillaMalaImagen3, null, rectVidaPastillaMala3, null);
-
-
-
 
         }
 }

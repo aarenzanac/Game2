@@ -12,6 +12,11 @@ public class PantallaJuego extends AppCompatActivity {
     private Juego juego;
     private Handler handler = new Handler();
 
+    /*@Override
+    public void onBackPressed() {
+       juego.gameloopSound.release();
+    }*/
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
