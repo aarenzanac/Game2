@@ -43,7 +43,6 @@ public class Juego extends View {
         Bitmap pacman =  BitmapFactory.decodeResource(getResources(),R.drawable.pacman);
         Bitmap pastillaMalaImagen =  BitmapFactory.decodeResource(getResources(),R.drawable.pastilla_mala);
         Bitmap pastillaBuenaImagen =  BitmapFactory.decodeResource(getResources(),R.drawable.aspirina);
-        Bitmap monedaFalsaCogidaImagen = BitmapFactory.decodeResource(getResources(),R.drawable.pastilla_mala_cogida);
 
         //PAINTS PARA LOS CIRCULOS PACMAN, CIRCULO PASTILLA BUENA, CIRCULO PASTILLA MALA, PUNTUACION Y TEXTOS DE TITULO DE VIDAS
         //Paint fondo = new Paint();//ELIMINO ESTE PAINT PUESTO QUE HEMOS PUESTO UNA IMAGEN BITMAP DE FONDO DE PANTALLA
@@ -70,10 +69,6 @@ public class Juego extends View {
         int colorPastillaMala1 = Color.RED;
         int colorPastillaMala2 = Color.RED;
         int colorPastillaMala3 = Color.RED;
-        Bitmap vidaPastillaMalaImagen1 = pastillaMalaImagen;
-        Bitmap vidaPastillaMalaImagen2 = pastillaMalaImagen;
-        Bitmap vidaPastillaMalaImagen3 = pastillaMalaImagen;
-
 
 
         public Juego(Context context) {
@@ -160,14 +155,10 @@ public class Juego extends View {
             puntos.setColor(Color.BLACK);
             vidaPastillaBuena1.setColor(colorPastillaBuena1);
             vidaPastillaMala1.setColor(colorPastillaMala1);
-            vidaPastillaMalaImagen1 = pastillaMalaImagen;
             vidaPastillaBuena2.setColor(colorPastillaBuena2);
             vidaPastillaMala2.setColor(colorPastillaMala2);
-            vidaPastillaMalaImagen2 = pastillaMalaImagen;
             vidaPastillaBuena3.setColor(colorPastillaBuena3);
             vidaPastillaMala3.setColor(colorPastillaMala3);
-            vidaPastillaMalaImagen3 = pastillaMalaImagen;
-
 
             //Pinto rectángulo con un ancho y alto de 1000 o de menos si la pantalla es menor.
             //canvas.drawRect(new Rect(0,0,(ancho),(alto)),fondo); //ELIMINO ESTE DRAWRECT PUESTO QUE PINTAREMOS CON DRAWBITMAP EL FONDO PANTALLA
@@ -221,11 +212,10 @@ public class Juego extends View {
                 contadorPastillasMalasCogidas += 1;
                 if(contadorPastillasMalasCogidas == 1){
                     colorPastillaMala1 = Color.GRAY;
-                    vidaPastillaMalaImagen1= monedaFalsaCogidaImagen;
 
                 }else if(contadorPastillasMalasCogidas == 2){
                     colorPastillaMala2 = Color.GRAY;
-                    vidaPastillaMalaImagen2= monedaFalsaCogidaImagen;
+
                 }
             }
 
@@ -289,6 +279,5 @@ public class Juego extends View {
             canvas.drawOval(rectVidaPastillaMala1, vidaPastillaMala1);
             canvas.drawOval(rectVidaPastillaMala2, vidaPastillaMala2);
             canvas.drawOval(rectVidaPastillaMala3, vidaPastillaMala3);
-
         }
 }
