@@ -24,7 +24,7 @@ public class Juego extends View {
         public int posX,posY,radioAspirina, radioPacman, posPastillaX, posPastillaY, posPastillaMalaX, posPastillaMalaY, avancePastillas, contadorPastillasMalasCogidas, contadorPastillasBuenasEscapadas;
         private GestureDetector gestos;
         private RectF rectPacman;
-        private RectF rectMoneda;
+        private RectF rectPastillaBuena;
         private RectF rectPastillaFalsa;
         public RectF rectVidaPastillaBuena1, rectVidaPastillaBuena2, rectVidaPastillaBuena3;
         public RectF rectVidaPastillaMala1, rectVidaPastillaMala2, rectVidaPastillaMala3;
@@ -37,12 +37,13 @@ public class Juego extends View {
         private PantallaJuego pantallaJuego = new PantallaJuego();
         boolean valorMusica;
         boolean valorSonidos;
+        int valorPastilla = 3;
 
         //BITMAPS PARA ESTABLECER IMAGENES PARA EL FONDO Y PARA SUPERPONER A LOS CÍRCULOS.
         Bitmap fondoPantalla;
         Bitmap pacman =  BitmapFactory.decodeResource(getResources(),R.drawable.pacman);
         Bitmap pastillaMalaImagen =  BitmapFactory.decodeResource(getResources(),R.drawable.pastilla_mala);
-        Bitmap pastillaBuenaImagen =  BitmapFactory.decodeResource(getResources(),R.drawable.aspirina);
+        Bitmap pastillaBuenaImagen = BitmapFactory.decodeResource(getResources(),R.drawable.aspirina33);
 
         //PAINTS PARA LOS CIRCULOS PACMAN, CIRCULO PASTILLA BUENA, CIRCULO PASTILLA MALA, PUNTUACION Y TEXTOS DE TITULO DE VIDAS
         //Paint fondo = new Paint();//ELIMINO ESTE PAINT PUESTO QUE HEMOS PUESTO UNA IMAGEN BITMAP DE FONDO DE PANTALLA
@@ -117,6 +118,40 @@ public class Juego extends View {
         }
 
 
+        //FUNCIÓN PARA CALCULAR EL VALOR DE LA PASTILLA
+        public int calcularValorPastilla(){
+            int calculoValorPastilla = 1 + random.nextInt(5);
+            return calculoValorPastilla;
+        }
+
+        //FUNCION PARA CAMBIAR LA IMAGEN DE LA PASTILLA BUENA
+        public Bitmap calcularImagenPastilla(int valorPastilla){
+            Bitmap pastillaBuenaImagenCambiada = null;
+            switch (valorPastilla){
+                case 1: {
+                    pastillaBuenaImagenCambiada = BitmapFactory.decodeResource(getResources(),R.drawable.aspirina11);
+                    break;
+                }
+                case 2: {
+                    pastillaBuenaImagenCambiada = BitmapFactory.decodeResource(getResources(),R.drawable.aspirina22);
+                    break;
+                }
+                case 3: {
+                    pastillaBuenaImagenCambiada = BitmapFactory.decodeResource(getResources(),R.drawable.aspirina33);
+                    break;
+                }
+                case 4: {
+                    pastillaBuenaImagenCambiada = BitmapFactory.decodeResource(getResources(),R.drawable.aspirina44);
+                    break;
+                }
+                case 5: {
+                    pastillaBuenaImagenCambiada = BitmapFactory.decodeResource(getResources(),R.drawable.aspirina55);
+                    break;
+                }
+            };
+            return pastillaBuenaImagenCambiada;
+        }
+
         //PINTAMOS TODOS LOS ELEMENTOS DEL JUEGO
         @Override
         protected void onDraw(Canvas canvas) {
@@ -125,7 +160,6 @@ public class Juego extends View {
                 gameloopSound.start();
 
             }
-
 
             //Definimos los colores de los objetos a pintar
             //fondo.setColor(Color.BLACK); //ELIMINO EL COLOR PUESTO QUE HEMOS PUESTO IMAGEN DE FONDO.
@@ -174,13 +208,20 @@ public class Juego extends View {
             pastilla.setFilterBitmap(true);
             pastilla.setDither(true);
 
-            if (posPastillaY>alto) {
+
+            //pastillaBuenaImagen = calcularImagenPastilla(valorPastilla);
+
+            if (posPastillaY>alto ) {
                 posPastillaY=50;
+                valorPastilla = calcularValorPastilla();
+                pastillaBuenaImagen = calcularImagenPastilla(valorPastilla);
                 posPastillaX= random.nextInt(ancho);
+
+
             }
-            rectMoneda = new RectF((posPastillaX-radioAspirina),(posPastillaY-radioAspirina),(posPastillaX+radioAspirina),(posPastillaY+radioAspirina));
-            canvas.drawOval(rectMoneda,pastilla);
-            canvas.drawBitmap(pastillaBuenaImagen, null, rectMoneda, null);
+            rectPastillaBuena = new RectF((posPastillaX-radioAspirina),(posPastillaY-radioAspirina),(posPastillaX+radioAspirina),(posPastillaY+radioAspirina));
+            canvas.drawOval(rectPastillaBuena, pastilla);
+            canvas.drawBitmap(pastillaBuenaImagen, null, rectPastillaBuena, null);
 
             //PINTAMOS LA PASTILLA MALA
 
@@ -220,15 +261,17 @@ public class Juego extends View {
             }
 
             // Calculo intersección
-            if (RectF.intersects(rectPacman,rectMoneda)) {
+            if (RectF.intersects(rectPacman,rectPastillaBuena)) {
                 if(valorSonidos){
                     pastillaBuenaSound.start();
                 }
-                puntuacion += 2;
+                puntuacion += valorPastilla;
                 posPastillaY=60;
                 posPastillaX= random.nextInt(ancho);
+                valorPastilla = calcularValorPastilla();
+                pastillaBuenaImagen = calcularImagenPastilla(valorPastilla);
             }else{
-
+                //pastillaBuenaImagen = calcularImagenPastilla(valorPastilla);
                 //CONTAMOS LAS PASTILLAS BUENAS ESCAPADAS PARA AL LLEGAR A 3 FINALIZAR EL JUEGO
                 if(posPastillaY - radioAspirina == 0){
                     contadorPastillasBuenasEscapadas += 1;
@@ -255,6 +298,7 @@ public class Juego extends View {
                 }
 
             }
+
 
             canvas.drawText(puntuacion.toString(), 150,150,puntos);
             canvas.drawText("PUNTOS", 200,50,tituloPuntos);
