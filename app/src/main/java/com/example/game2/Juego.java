@@ -238,7 +238,7 @@ public class Juego extends View {
             canvas.drawBitmap(pastillaBuenaImagen, null, rectPastillaBuena, null);
 
             //PINTAMOS LA PASTILLA MALA
-            //pastillaMala.setColor(Color.RED); //ELIMINO ESTE COLOR PUESTO QUE HEMOS SUPERPUESTO IMAGEN DE PASTILLA MALA
+            pastillaMala.setColor(Color.TRANSPARENT);
             //pastillaMala.setStyle(Paint.Style.FILL_AND_STROKE); //ELIMINO ESTE ESTILO PUESTO QUE HEMOS SUPERPUESTO IMAGEN DE PASTILLA MALA
             pastillaMala.setAntiAlias(true);
             pastillaMala.setFilterBitmap(true);
