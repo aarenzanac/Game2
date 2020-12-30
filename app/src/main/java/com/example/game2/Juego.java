@@ -44,6 +44,10 @@ public class Juego extends View {
         Bitmap pacman =  BitmapFactory.decodeResource(getResources(),R.drawable.pacman);
         Bitmap pastillaMalaImagen =  BitmapFactory.decodeResource(getResources(),R.drawable.pastilla_mala);
         Bitmap pastillaBuenaImagen = BitmapFactory.decodeResource(getResources(),R.drawable.aspirina33);
+        Bitmap vidaPastillaMala = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.pastilla_mala), 70,70,true);
+        Bitmap vidaPastillaMalaCogida = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.pastilla_mala_cogida), 70, 70, true);
+        Bitmap vidaPastillaBuena = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.aspirina), 70,70,true);
+        Bitmap vidaPastillaBuenaEscapada = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.aspirina_escapada), 70, 70, true);
 
         //PAINTS PARA LOS CIRCULOS PACMAN, CIRCULO PASTILLA BUENA, CIRCULO PASTILLA MALA, PUNTUACION Y TEXTOS DE TITULO DE VIDAS
         //Paint fondo = new Paint();//ELIMINO ESTE PAINT PUESTO QUE HEMOS PUESTO UNA IMAGEN BITMAP DE FONDO DE PANTALLA
@@ -63,13 +67,23 @@ public class Juego extends View {
         Paint vidaPastillaBuena3 = new Paint();
         Paint vidaPastillaMala3 = new Paint();
 
+        //BITMAPS PARA MARCADOR DE PASTILLAS MALAS COGIDAS  Y BUENAS ESCAPADAS
+        Bitmap marcadorVidaPastillaMala1 = vidaPastillaMala;
+        Bitmap marcadorVidaPastillaMala2 = vidaPastillaMala;
+        Bitmap marcadorVidaPastillaMala3 = vidaPastillaMala;
+
+        Bitmap marcadorVidaPastillaBuena1 = vidaPastillaBuena;
+        Bitmap marcadorVidaPastillaBuena2 = vidaPastillaBuena;
+        Bitmap marcadorVidaPastillaBuena3 = vidaPastillaBuena;
+
+        //ELIMINO ESTAS LINEAS PUESTO QUE LOS MARCADORES DE VIDAS LOS HAGO CON BITMAPS EN LUGAR DE CIRCULOS
         //COLORES DE LOS CÍRCULOS DE LAS VIDAS.
-        int colorPastillaBuena1 = Color.GREEN;
-        int colorPastillaBuena2 = Color.GREEN;
-        int colorPastillaBuena3 = Color.GREEN;
-        int colorPastillaMala1 = Color.RED;
-        int colorPastillaMala2 = Color.RED;
-        int colorPastillaMala3 = Color.RED;
+        //int colorPastillaBuena1 = Color.GREEN;
+        //int colorPastillaBuena2 = Color.GREEN;
+        //int colorPastillaBuena3 = Color.GREEN;
+        //int colorPastillaMala1 = Color.RED;
+        //int colorPastillaMala2 = Color.RED;
+        //int colorPastillaMala3 = Color.RED;
 
 
         public Juego(Context context) {
@@ -161,9 +175,10 @@ public class Juego extends View {
 
             }
 
-            //Definimos los colores de los objetos a pintar
+            //DEFINIMOS LOS COLORES DE LOS OBJETOS A PINTAR
             //fondo.setColor(Color.BLACK); //ELIMINO EL COLOR PUESTO QUE HEMOS PUESTO IMAGEN DE FONDO.
             //fondo.setStyle(Paint.Style.FILL_AND_STROKE); //ELIMINO EL ESTILO PUESTO QUE HEMOS PUESTO FONDO.
+
 
             //ESTABLEZCO EL BITMAP CON LA IMAGEN DE FONDO DE PANTALLA
             fondoPantalla = BitmapFactory.decodeResource(getResources(),R.drawable.fondo_pantalla_juego);
@@ -187,14 +202,15 @@ public class Juego extends View {
             puntos.setTextAlign(Paint.Align.RIGHT);
             puntos.setTextSize(100);
             puntos.setColor(Color.BLACK);
-            vidaPastillaBuena1.setColor(colorPastillaBuena1);
-            vidaPastillaMala1.setColor(colorPastillaMala1);
-            vidaPastillaBuena2.setColor(colorPastillaBuena2);
-            vidaPastillaMala2.setColor(colorPastillaMala2);
-            vidaPastillaBuena3.setColor(colorPastillaBuena3);
-            vidaPastillaMala3.setColor(colorPastillaMala3);
+            //ELIMINO ESTAS LINEAS PUESTO QUE LOS MARCADORES DE VIDAS LOS HAGO CON BITMAPS EN LUGAR DE CÍRCULOS.
+            //vidaPastillaBuena1.setColor(colorPastillaBuena1);
+            //vidaPastillaMala1.setColor(colorPastillaMala1);
+            //vidaPastillaBuena2.setColor(colorPastillaBuena2);
+            //vidaPastillaMala2.setColor(colorPastillaMala2);
+            //vidaPastillaBuena3.setColor(colorPastillaBuena3);
+            //vidaPastillaMala3.setColor(colorPastillaMala3);
 
-            //Pinto rectángulo con un ancho y alto de 1000 o de menos si la pantalla es menor.
+            //PINTO EL RECTÁNGUNO CON ANCHO Y ALTO DE 1000 O MENOS SI LA PANTALLA ES MENOR
             //canvas.drawRect(new Rect(0,0,(ancho),(alto)),fondo); //ELIMINO ESTE DRAWRECT PUESTO QUE PINTAREMOS CON DRAWBITMAP EL FONDO PANTALLA
             canvas.drawBitmap(fondoPantalla, null, new Rect(0,0,(ancho),(alto)), null);
 
@@ -208,9 +224,7 @@ public class Juego extends View {
             pastilla.setFilterBitmap(true);
             pastilla.setDither(true);
 
-
-            //pastillaBuenaImagen = calcularImagenPastilla(valorPastilla);
-
+            //SI LA PASTILLA SE VA SIN ATRAPAR, CALCULO VALOR, POSICIÓN E IMAGEN PARA LA SIGUIENTE
             if (posPastillaY>alto ) {
                 posPastillaY=50;
                 valorPastilla = calcularValorPastilla();
@@ -224,12 +238,13 @@ public class Juego extends View {
             canvas.drawBitmap(pastillaBuenaImagen, null, rectPastillaBuena, null);
 
             //PINTAMOS LA PASTILLA MALA
-
             //pastillaMala.setColor(Color.RED); //ELIMINO ESTE COLOR PUESTO QUE HEMOS SUPERPUESTO IMAGEN DE PASTILLA MALA
             //pastillaMala.setStyle(Paint.Style.FILL_AND_STROKE); //ELIMINO ESTE ESTILO PUESTO QUE HEMOS SUPERPUESTO IMAGEN DE PASTILLA MALA
             pastillaMala.setAntiAlias(true);
             pastillaMala.setFilterBitmap(true);
             pastillaMala.setDither(true);
+
+            //SI LA PASTILLA SE VA SIN ATRAPAR, CALCULO VALOR Y POSICIÓN PARA LA SIGUIENTE
             if (posPastillaMalaY>alto) {
                 posPastillaMalaY=50;
                 posPastillaMalaX= random.nextInt(ancho);
@@ -237,10 +252,9 @@ public class Juego extends View {
             rectPastillaFalsa = new RectF((posPastillaMalaX-radioAspirina),(posPastillaMalaY-radioAspirina),(posPastillaMalaX+radioAspirina),
                     (posPastillaMalaY+radioAspirina));
             canvas.drawOval(rectPastillaFalsa,pastillaMala);
-
             canvas.drawBitmap(pastillaMalaImagen, null, rectPastillaFalsa, null);
 
-            // Calculo intersección
+            //CALCULO INTERSECCIÓN
             if (RectF.intersects(rectPacman,rectPastillaFalsa)) {
                 if(valorSonidos){
                     pastillaMalaSound.start();
@@ -252,15 +266,16 @@ public class Juego extends View {
                 //CONTAMOS LAS PASTILLAS MALAS COGIDAS PARA FINALIZAR EL JUEGO AL LLEGAR A 3
                 contadorPastillasMalasCogidas += 1;
                 if(contadorPastillasMalasCogidas == 1){
-                    colorPastillaMala1 = Color.GRAY;
+                    //colorPastillaMala1 = Color.GRAY;
+                    marcadorVidaPastillaMala1 = vidaPastillaMalaCogida;
 
                 }else if(contadorPastillasMalasCogidas == 2){
-                    colorPastillaMala2 = Color.GRAY;
-
+                    //colorPastillaMala2 = Color.GRAY;
+                    marcadorVidaPastillaMala2 = vidaPastillaMalaCogida;
                 }
             }
 
-            // Calculo intersección
+            // CALCULO INTERSECCIÓN
             if (RectF.intersects(rectPacman,rectPastillaBuena)) {
                 if(valorSonidos){
                     pastillaBuenaSound.start();
@@ -271,14 +286,15 @@ public class Juego extends View {
                 valorPastilla = calcularValorPastilla();
                 pastillaBuenaImagen = calcularImagenPastilla(valorPastilla);
             }else{
-                //pastillaBuenaImagen = calcularImagenPastilla(valorPastilla);
                 //CONTAMOS LAS PASTILLAS BUENAS ESCAPADAS PARA AL LLEGAR A 3 FINALIZAR EL JUEGO
                 if(posPastillaY - radioAspirina == 0){
                     contadorPastillasBuenasEscapadas += 1;
                     if(contadorPastillasBuenasEscapadas == 2){
-                        colorPastillaBuena1 = Color.GRAY;
+                        //colorPastillaBuena1 = Color.GRAY;
+                        marcadorVidaPastillaBuena1 = vidaPastillaBuenaEscapada;
                     }else if(contadorPastillasBuenasEscapadas == 3){
-                        colorPastillaBuena2 = Color.GRAY;
+                        //colorPastillaBuena2 = Color.GRAY;
+                        marcadorVidaPastillaBuena2 = vidaPastillaBuenaEscapada;
                     }
                 }
             }
@@ -299,29 +315,34 @@ public class Juego extends View {
 
             }
 
-
+            //PINTO LOS TÍTULOS PARA LOS MARCADORES
             canvas.drawText(puntuacion.toString(), 150,150,puntos);
             canvas.drawText("PUNTOS", 200,50,tituloPuntos);
             canvas.drawText("PASTILLAS BUENAS", 650,50,tituloPastillasBuenas);
             canvas.drawText("PASTILLAS MALAS", 1080,50,tituloPastillasMalas);
 
 
-
             //POSICIONAMIENTO DE CONTADOR DE PASTILLAS BUENAS ESCAPADAS
             rectVidaPastillaBuena1= new RectF(350, 150, 300 , 100);
             rectVidaPastillaBuena2= new RectF(450, 150, 400 , 100);
             rectVidaPastillaBuena3= new RectF(550, 150, 500 , 100);
-            canvas.drawOval(rectVidaPastillaBuena1, vidaPastillaBuena1);
-            canvas.drawOval(rectVidaPastillaBuena2, vidaPastillaBuena2);
-            canvas.drawOval(rectVidaPastillaBuena3, vidaPastillaBuena3);
+            //canvas.drawOval(rectVidaPastillaBuena1, vidaPastillaBuena1);
+            canvas.drawBitmap(marcadorVidaPastillaBuena1, 298, 82, vidaPastillaBuena1);
+            //canvas.drawOval(rectVidaPastillaBuena2, vidaPastillaBuena2);
+            canvas.drawBitmap(marcadorVidaPastillaBuena2, 398, 82, vidaPastillaBuena2);
+            //canvas.drawOval(rectVidaPastillaBuena3, vidaPastillaBuena3);
+            canvas.drawBitmap(marcadorVidaPastillaBuena3, 498, 82, vidaPastillaBuena3);
 
 
             //POSICIONAMIENTO DE CONTADOR DE PASTILLAS MALAS COGIDAS
             rectVidaPastillaMala1= new RectF(800, 150, 750 , 100);
             rectVidaPastillaMala2= new RectF(900, 150, 850 , 100);
             rectVidaPastillaMala3= new RectF(1000, 150, 950 , 100);
-            canvas.drawOval(rectVidaPastillaMala1, vidaPastillaMala1);
-            canvas.drawOval(rectVidaPastillaMala2, vidaPastillaMala2);
-            canvas.drawOval(rectVidaPastillaMala3, vidaPastillaMala3);
+            //canvas.drawOval(rectVidaPastillaMala1, vidaPastillaMala1);
+            canvas.drawBitmap(marcadorVidaPastillaMala1, 739, 80, vidaPastillaMala1);
+            //canvas.drawOval(rectVidaPastillaMala2, vidaPastillaMala2);
+            canvas.drawBitmap(marcadorVidaPastillaMala2, 839, 80, vidaPastillaMala2);
+            //canvas.drawOval(rectVidaPastillaMala3, vidaPastillaMala3);
+            canvas.drawBitmap(marcadorVidaPastillaMala3, 939, 80, vidaPastillaMala3);
         }
 }
